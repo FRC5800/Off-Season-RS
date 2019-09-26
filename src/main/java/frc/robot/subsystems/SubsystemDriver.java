@@ -1,26 +1,27 @@
 package frc.robot.subsystems;
 
-import static frc.robot.RobotMap.DRIVE_MOTOR_FL_ID;
-import static frc.robot.RobotMap.DRIVE_MOTOR_FR_ID;
-import static frc.robot.RobotMap.DRIVE_MOTOR_RL_ID;
-import static frc.robot.RobotMap.DRIVE_MOTOR_RR_ID;
+import static frc.robot.RobotMap.*;
 
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.VictorSP;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
 import frc.robot.commands.CommandDrive;
 
 public class SubsystemDriver extends Subsystem {
-	private VictorSP motorFrontLeft = new VictorSP(DRIVE_MOTOR_FL_ID);
-	private VictorSP motorRearLeft = new VictorSP(DRIVE_MOTOR_RL_ID);
-	private VictorSP motorFrontRight = new VictorSP(DRIVE_MOTOR_FR_ID);
-	private VictorSP motorRearRight = new VictorSP(DRIVE_MOTOR_RR_ID);
+	public TalonSRX masterLeft = new TalonSRX (DRIVE_MOTOR_RL_ID);
+	public TalonSRX masterRight = new TalonSRX (DRIVE_MOTOR_RR_ID);
+	public TalonSRX slaveLeft = new TalonSRX (DRIVE_MOTOR_FL_ID);
+	public TalonSRX slaveRight = new TalonSRX(DRIVE_MOTOR_FR_ID);
 
-	private SpeedControllerGroup motorLeft = new SpeedControllerGroup(motorFrontLeft, motorRearLeft);
-	private SpeedControllerGroup motorRight = new SpeedControllerGroup(motorFrontRight, motorRearRight);
-	private DifferentialDrive driveTrain = new DifferentialDrive(motorLeft, motorRight);
+
+	public void tankDrive(double _l, double _r){
+		this.masterLeft.set(ControlMode.PercentOutput, _l);
+		this.masterRight.set(ControlMode.PercentOutput, _r);
+		this.slaveLeft.follow(this.masterLeft);
+		this.slaveRight.follow(this.masterRight);
+	}
 
 	@Override
 	public void initDefaultCommand() {
@@ -28,22 +29,6 @@ public class SubsystemDriver extends Subsystem {
 	}
 
 	public SubsystemDriver() {
-		super();
-	}
-
-	public void tankDrive(double leftSpeed, double rightSpeed) {
-		driveTrain.tankDrive(leftSpeed, rightSpeed);
-	}
-
-	public void arcadeDrive(double speed, double heading) {
-		driveTrain.arcadeDrive(speed, heading);
-	}
-
-	public void driveTrainLeft(double speed) {
-		this.motorLeft.set(speed);
-	}
-
-	public void driveTrainRight(double speed) {
-		this.motorRight.set(speed);
+		super();		
 	}
 }

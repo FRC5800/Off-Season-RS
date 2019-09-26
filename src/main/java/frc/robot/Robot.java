@@ -1,14 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.SubsystemDriver;
-import frc.robot.subsystems.SubsystemJoystick;
-import frc.robot.subsystems.SubsystemIntakeCargo;
-import frc.robot.subsystems.SubsystemIntakeHatch;
+import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
   public static SubsystemDriver driver = new SubsystemDriver();
@@ -30,6 +28,7 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
+    CameraServer.getInstance().startAutomaticCapture();
     SmartDashboard.putData("Auto mode", m_chooser);
   }
 
